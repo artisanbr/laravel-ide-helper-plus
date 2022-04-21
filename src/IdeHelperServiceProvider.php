@@ -1,32 +1,23 @@
 <?php
 
 /**
- * Laravel IDE Helper Generator
+ * Laravel IDE Helper Generator (Plus) - Based on Barry Vd. Laravel IDE Helper Generator
  *
+ * @author    Renalcio Carlos Jr. <renalcio.c@gmail.com>
  * @author    Barry vd. Heuvel <barryvdh@gmail.com>
- * @copyright 2014 Barry vd. Heuvel / Fruitcake Studio (http://www.fruitcakestudio.nl)
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
- * @link      https://github.com/barryvdh/laravel-ide-helper
+ * @link      https://github.com/renalcio/laravel-ide-helper-plus
  */
 
-namespace Barryvdh\LaravelIdeHelper;
+namespace Renalcio\LaravelIdeHelperPlus;
 
-use Barryvdh\LaravelIdeHelper\Console\EloquentCommand;
-use Barryvdh\LaravelIdeHelper\Console\GeneratorCommand;
-use Barryvdh\LaravelIdeHelper\Console\MetaCommand;
-use Barryvdh\LaravelIdeHelper\Console\ModelsCommand;
-use Barryvdh\LaravelIdeHelper\Listeners\GenerateModelHelper;
-use Illuminate\Console\Events\CommandFinished;
-use Illuminate\Contracts\Support\DeferrableProvider;
-use Illuminate\Database\Events\MigrationsEnded;
-use Illuminate\Support\ServiceProvider;
-use Illuminate\View\Engines\EngineResolver;
-use Illuminate\View\Engines\PhpEngine;
-use Illuminate\View\Factory;
-use Illuminate\View\FileViewFinder;
+use Renalcio\LaravelIdeHelperPlus\Console\IdeHelperCommand;
+use Renalcio\LaravelIdeHelperPlus\Console\ModelsCommand;
+use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider as BaseServiceProvider;
 
-class IdeHelperServiceProvider extends ServiceProvider implements DeferrableProvider
+class IdeHelperServiceProvider extends BaseServiceProvider
 {
+    protected static $configPath = __DIR__.'/../config/ide-helper-plus.php';
     /**
      * Bootstrap the application events.
      *
@@ -34,25 +25,14 @@ class IdeHelperServiceProvider extends ServiceProvider implements DeferrableProv
      */
     public function boot()
     {
-        if (!$this->app->runningUnitTests() && $this->app['config']->get('ide-helper.post_migrate', [])) {
-            $this->app['events']->listen(CommandFinished::class, GenerateModelHelper::class);
-            $this->app['events']->listen(MigrationsEnded::class, function () {
-                GenerateModelHelper::$shouldRun = true;
-            });
-        }
+        parent::boot();
 
-        if ($this->app->has('view')) {
-            $viewPath = __DIR__ . '/../resources/views';
-            $this->loadViewsFrom($viewPath, 'ide-helper');
-        }
-
-        $configPath = __DIR__ . '/../config/ide-helper.php';
         if (function_exists('config_path')) {
-            $publishPath = config_path('ide-helper.php');
+            $publishPath = config_path('ide-helper-extend.php');
         } else {
-            $publishPath = base_path('config/ide-helper.php');
+            $publishPath = base_path('config/ide-helper-extend.php');
         }
-        $this->publishes([$configPath => $publishPath], 'config');
+        $this->publishes([self::$configPath => $publishPath], 'config');
     }
 
     /**
@@ -62,16 +42,9 @@ class IdeHelperServiceProvider extends ServiceProvider implements DeferrableProv
      */
     public function register()
     {
-        $configPath = __DIR__ . '/../config/ide-helper.php';
-        $this->mergeConfigFrom($configPath, 'ide-helper');
-        $localViewFactory = $this->createLocalViewFactory();
+        parent::register();
 
-        $this->app->singleton(
-            'command.ide-helper.generate',
-            function ($app) use ($localViewFactory) {
-                return new GeneratorCommand($app['config'], $app['files'], $localViewFactory);
-            }
-        );
+        $this->mergeConfigFrom(self::$configPath, 'ide-helper');
 
         $this->app->singleton(
             'command.ide-helper.models',
@@ -81,24 +54,15 @@ class IdeHelperServiceProvider extends ServiceProvider implements DeferrableProv
         );
 
         $this->app->singleton(
-            'command.ide-helper.meta',
-            function ($app) use ($localViewFactory) {
-                return new MetaCommand($app['files'], $localViewFactory, $app['config']);
-            }
-        );
-
-        $this->app->singleton(
-            'command.ide-helper.eloquent',
+            'command.ide-helper.all',
             function ($app) {
-                return new EloquentCommand($app['files']);
+                return new IdeHelperCommand();
             }
         );
 
         $this->commands(
-            'command.ide-helper.generate',
-            'command.ide-helper.models',
-            'command.ide-helper.meta',
-            'command.ide-helper.eloquent'
+            'command.ide-helper.all',
+            IdeHelperCommand::class
         );
     }
 
@@ -109,22 +73,6 @@ class IdeHelperServiceProvider extends ServiceProvider implements DeferrableProv
      */
     public function provides()
     {
-        return ['command.ide-helper.generate', 'command.ide-helper.models'];
-    }
-
-    /**
-     * @return Factory
-     */
-    private function createLocalViewFactory()
-    {
-        $resolver = new EngineResolver();
-        $resolver->register('php', function () {
-            return new PhpEngine($this->app['files']);
-        });
-        $finder = new FileViewFinder($this->app['files'], [__DIR__ . '/../resources/views']);
-        $factory = new Factory($resolver, $finder, $this->app['events']);
-        $factory->addExtension('php', 'php');
-
-        return $factory;
+        return array_merge(['command.ide-helper.all', 'command.ide-helper.models'], parent::provides());
     }
 }
