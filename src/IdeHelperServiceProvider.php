@@ -28,9 +28,9 @@ class IdeHelperServiceProvider extends BaseServiceProvider
         parent::boot();
 
         if (function_exists('config_path')) {
-            $publishPath = config_path('ide-helper-extend.php');
+            $publishPath = config_path('ide-helper-plus.php');
         } else {
-            $publishPath = base_path('config/ide-helper-extend.php');
+            $publishPath = base_path('config/ide-helper-plus.php');
         }
         $this->publishes([self::$configPath => $publishPath], 'config');
     }
@@ -44,7 +44,7 @@ class IdeHelperServiceProvider extends BaseServiceProvider
     {
         parent::register();
 
-        $this->mergeConfigFrom(self::$configPath, 'ide-helper');
+        $this->mergeConfigFrom(self::$configPath, 'ide-helper-plus');
 
         $this->app->singleton(
             'command.ide-helper.models',
@@ -56,7 +56,7 @@ class IdeHelperServiceProvider extends BaseServiceProvider
         $this->app->singleton(
             'command.ide-helper.all',
             function ($app) {
-                return new IdeHelperCommand();
+                return new IdeHelperCommand($app['files']);
             }
         );
 

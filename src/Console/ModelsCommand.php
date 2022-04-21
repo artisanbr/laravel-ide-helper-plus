@@ -42,7 +42,7 @@ class ModelsCommand extends ModelsCommandBase
 
         $ignore = array_merge(
             explode(',', $ignore),
-            $this->laravel['config']->get('ide-helper.ignored_models', [])
+            $this->laravel['config']->get('ide-helper-plus.ignored_models', [])
         );
 
         foreach ($models as $name) {
@@ -61,16 +61,16 @@ class ModelsCommand extends ModelsCommandBase
 
                     //Verificar na lista de ingoradas
                     $class_dir = dirname($reflectionClass->getFileName());
-                    $check_dir = Str::contains(Str::lower($class_dir), collect(config('ide-helper.ignored_locations', []))->map(function($i, $k){
+                    $check_dir = Str::contains(Str::lower($class_dir), collect(config('ide-helper-plus.ignored_locations', []))->map(function($i, $k){
                         return Str::lower($i);
                     })->toArray());
                     if($check_dir){
-                        dump('Ignorando: '.$name);
+                        $this->comment("Ignoring model '$name' - Ignored Location");
                         continue;
                     }
 
                     //Checkar se a classe da model está inclusa nas configuradas
-                    $model_classes = config("ide-helper.model_class");
+                    $model_classes = config("ide-helper-plus.model_class");
                     $check_model = false;
                     foreach($model_classes as $model_class){
                         if ($reflectionClass->isSubclassOf($model_class)) {
@@ -79,6 +79,7 @@ class ModelsCommand extends ModelsCommandBase
                     }
 
                     if (!$check_model) {
+                        $this->comment("Ignoring model '$name' - Not Subclass of: ".implode(', ', $model_classes));
                         continue;
                     }
 
@@ -89,9 +90,8 @@ class ModelsCommand extends ModelsCommandBase
                         continue;
                     }
 
+                    $this->comment("Generating model '$name'");
                     /*$model = $this->laravel->make($name);*/
-
-                    dump($name);
                     try {
                         $model = $this->laravel->make($name);
                     }catch (\Exception $e){
