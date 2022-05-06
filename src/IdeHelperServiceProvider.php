@@ -17,7 +17,7 @@ use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider as BaseServiceProvider;
 
 class IdeHelperServiceProvider extends BaseServiceProvider
 {
-    protected static $configPath = __DIR__.'/../config/ide-helper-plus.php';
+    protected static $configPath = __DIR__.'/config/ide-helper-plus.php';
     /**
      * Bootstrap the application events.
      *
