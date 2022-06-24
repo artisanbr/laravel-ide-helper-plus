@@ -3,7 +3,7 @@
 return [
 
     'model_class' => [
-        'Illuminate\Database\Eloquent\Model'
+        \Illuminate\Database\Eloquent\Model::class
     ],
 
     'ignored_locations' => [
