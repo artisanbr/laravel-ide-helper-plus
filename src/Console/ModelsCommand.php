@@ -1,6 +1,6 @@
 <?php
 
-namespace Renalcio\LaravelIdeHelperPlus\Console;
+namespace ArtisanLabs\LaravelIdeHelperPlus\Console;
 
 use Composer\Autoload\ClassMapGenerator;
 use Illuminate\Support\Str;

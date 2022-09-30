@@ -9,10 +9,10 @@
  * @link      https://github.com/renalcio/laravel-ide-helper-plus
  */
 
-namespace Renalcio\LaravelIdeHelperPlus;
+namespace ArtisanLabs\LaravelIdeHelperPlus;
 
-use Renalcio\LaravelIdeHelperPlus\Console\IdeHelperCommand;
-use Renalcio\LaravelIdeHelperPlus\Console\ModelsCommand;
+use ArtisanLabs\LaravelIdeHelperPlus\Console\IdeHelperCommand;
+use ArtisanLabs\LaravelIdeHelperPlus\Console\ModelsCommand;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider as BaseServiceProvider;
 
 class IdeHelperServiceProvider extends BaseServiceProvider

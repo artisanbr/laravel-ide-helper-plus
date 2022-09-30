@@ -37,18 +37,18 @@
         },
         "laravel": {
             "providers": [
-                "Renalcio\\LaravelIdeHelperPlus\\IdeHelperServiceProvider"
+                "ArtisanLabs\\LaravelIdeHelperPlus\\IdeHelperServiceProvider"
             ]
         }
     },
     "autoload": {
         "psr-4": {
-            "Renalcio\\LaravelIdeHelperPlus\\": "src"
+            "ArtisanLabs\\LaravelIdeHelperPlus\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Renalcio\\LaravelIdeHelperPlus\\Tests\\": "tests"
+            "ArtisanLabs\\LaravelIdeHelperPlus\\Tests\\": "tests"
         }
     },
     "minimum-stability": "dev",
