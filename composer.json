@@ -1,5 +1,5 @@
 {
-    "name": "renalcio/laravel-ide-helper-plus",
+    "name": "artisan-labs/laravel-ide-helper-plus",
     "description": "Laravel IDE Helper, generates correct PHPDocs for all Facade classes, to improve auto-completion.",
     "keywords": [
         "laravel",

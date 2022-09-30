@@ -6,7 +6,7 @@
  * @author    Renalcio Carlos Jr. <renalcio.c@gmail.com>
  * @author    Barry vd. Heuvel <barryvdh@gmail.com>
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
- * @link      https://github.com/renalcio/laravel-ide-helper-plus
+ * @link      https://github.com/artisanbr/laravel-ide-helper-plus
  */
 
 namespace ArtisanLabs\LaravelIdeHelperPlus;
