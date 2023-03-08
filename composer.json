@@ -23,6 +23,7 @@
             "email": "renalcio.c@gmail.com"
         }
     ],
+
     "require": {
         "barryvdh/laravel-ide-helper": "^2.12"
     },
