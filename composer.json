@@ -1,5 +1,6 @@
 {
     "name": "artisan-labs/laravel-ide-helper-plus",
+    "version": "dev-stable",
     "description": "Laravel IDE Helper, generates correct PHPDocs for all Facade classes, to improve auto-completion.",
     "keywords": [
         "laravel",
@@ -25,17 +26,12 @@
     ],
 
     "require": {
-        "barryvdh/laravel-ide-helper": "^2.12"
+        "barryvdh/laravel-ide-helper": "^2.13"
     },
     "config": {
         "sort-packages": true
     },
     "extra": {
-        "branch-alias": {
-            "dev-main": "2.13-dev",
-            "master": "dev-main",
-            "dev": "dev-main"
-        },
         "laravel": {
             "providers": [
                 "ArtisanLabs\\LaravelIdeHelperPlus\\IdeHelperServiceProvider"
@@ -52,7 +48,7 @@
             "ArtisanLabs\\LaravelIdeHelperPlus\\Tests\\": "tests"
         }
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true,
     "scripts": {
         "analyze": "psalm",
